@@ -29,7 +29,7 @@ class Screen {
 
         if (screen[i][j] == 1) {
           fill(0);
-          rect(i*(width/screen_dimension), j*(height/screen_dimension), (width/screen_dimension), (height/screen_dimension));
+          rect(i*(blockx), j*(blocky), (blockx), (blocky));
         }
       }
     }
