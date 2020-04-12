@@ -32,4 +32,5 @@ void draw() {
   player.playerCtrl();
   ball.dBall();
   ball.ballPhys();
+  //delay(100);
 }
