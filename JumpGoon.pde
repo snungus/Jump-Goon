@@ -30,7 +30,21 @@ void draw() {
   player.dPlayer();
   player.playerPhys();
   player.playerCtrl();
-  ball.dBall();
-  ball.ballPhys();
+  if (ball != null) {
+    ball.dBall();
+    ball.ballPhys();
+  }
   //delay(100);
 }
+
+void mousePressed() {
+  if (ball == null) {
+    ball = new Ball();
+    ball.x = player.x+(blockx/2);
+    ball.y = player.y-(blockx/2);
+    ball.velx = (mouseX-ball.x);
+    ball.vely = (mouseY-ball.y);
+    ball.normalize();
+  }
+}
+    

@@ -1,8 +1,8 @@
 class Ball {
   int x = height/2;
   int y = height-300;
-  int xvel = 10;
-  int yvel = 0;
+  float velx = 0;
+  float vely = 0;
   boolean grounded;
   int ballSize = 10;
 
@@ -24,34 +24,41 @@ class Ball {
   }
 
   void ballPhys() {
-    y = y+yvel;
-    x = x+xvel;
+    y = int(y+vely);
+    x = int(x+velx);
     int indexX = x/blockx;
     int indexY = y/blocky;
+    int distRight = ((indexX+1)*blockx)-x;
+    int distLeft = x-((indexX+1)*blockx);
     if (x > (screen_dimension*blockx)) {
-      xvel *= -1;
+      velx *= -1;
       x = screen_dimension*blockx;
       indexX = x/blockx;
     }
     int currentBlock = stateOfIndex(indexX, indexY);
-    int bottomBlock = stateOfIndex(indexX, indexY-1);
     //bottom collision
     if (currentBlock == 0) {
       grounded = false;
-      yvel++;
+      vely++;
     } else {
-      yvel = 0;
+      vely = 0;
+      velx = 0;
       y = indexY*blockx;
       grounded = true;
+      ball = null;
     }
-    if (bottomBlock == 1) {
-      xvel*=-0.5;
-      x = (indexX+1)*blockx;
-    } else if (bottomBlock == 1) {
-      if (x % blockx == 0 && x > (indexX*blockx) && x < ((indexX+1)*blockx)) {
-        xvel*=-0.5;
-        println("kill me");
-      }
+    if (stateOfIndex(indexX+1, indexY-1) == 1 && distRight <= 5) {
+      velx *= -1;
+    } else if (stateOfIndex(indexX, indexY) == 1 && distLeft <= 5) {
+      velx *= -1;
     }
+  }
+  
+  void normalize() {
+    PVector vector = new PVector(velx, vely);
+    vector.normalize();
+    vector.mult(dist(x, y, mouseX, mouseY)/30); //fix this for tomorrow
+    velx = vector.x;
+    vely = vector.y;
   }
 }
