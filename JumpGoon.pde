@@ -42,7 +42,7 @@ void mousePressed() {
     ball = new Ball();
     ball.x = player.x+(blockx/2);
     ball.y = player.y-(blockx/2);
-    ball.velx = (mouseX-ball.x);
+    ball.velx = ((mouseX-(width-height)/2)-ball.x);
     ball.vely = (mouseY-ball.y);
     ball.normalize();
   }

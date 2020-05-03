@@ -4,7 +4,7 @@ class Ball {
   float velx = 0;
   float vely = 0;
   boolean grounded;
-  int ballSize = 10;
+  int ballSize = 20;
 
 
 
@@ -28,14 +28,22 @@ class Ball {
     x = int(x+velx);
     int indexX = x/blockx;
     int indexY = y/blocky;
-    int distRight = ((indexX+1)*blockx)-x;
-    int distLeft = x-((indexX+1)*blockx);
+    int distRight = x-((indexX)*blockx);
+    int distLeft = ((indexX)*blockx)-x;
+    println("distLeft: "+distLeft);
+    println("distRight: "+distRight);
     if (x > (screen_dimension*blockx)) {
       velx *= -1;
       x = screen_dimension*blockx;
       indexX = x/blockx;
     }
     int currentBlock = stateOfIndex(indexX, indexY);
+    //side colisions
+    if (stateOfIndex(indexX+1, indexY) == 1 && distRight <= 5) {
+      velx *= -1; //<>//
+    } else if (stateOfIndex(indexX-1, indexY) == 1 && distLeft <= 5) {
+      velx *= -1;
+    }
     //bottom collision
     if (currentBlock == 0) {
       grounded = false;
@@ -47,17 +55,12 @@ class Ball {
       grounded = true;
       ball = null;
     }
-    if (stateOfIndex(indexX+1, indexY-1) == 1 && distRight <= 5) {
-      velx *= -1;
-    } else if (stateOfIndex(indexX, indexY) == 1 && distLeft <= 5) {
-      velx *= -1;
-    }
   }
-  
+
   void normalize() {
     PVector vector = new PVector(velx, vely);
     vector.normalize();
-    vector.mult(dist(x, y, mouseX, mouseY)/30); //fix this for tomorrow
+    vector.mult(dist(x, y, (mouseX-(width-height)/2), mouseY)/30);
     velx = vector.x;
     vely = vector.y;
   }
