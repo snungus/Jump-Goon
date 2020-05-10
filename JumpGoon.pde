@@ -5,10 +5,12 @@ Ball ball;
 final int screen_dimension = 25;
 int blockx;
 int blocky;
+int power;
 
 Screen[] world = new Screen[1024];
 
 void setup() {
+  //frameRate(10);
   size(1920, 1080);
   blockx = height/screen_dimension;
   blocky = height/screen_dimension;
@@ -35,6 +37,13 @@ void draw() {
     ball.ballPhys();
   }
   //delay(100);
+  fill(255);
+  rect(9, 9, 12, 120);
+  fill(235, 0, 0);
+  rect(10, 10, 10, (power*4));
+  fill(255);
+  textSize(24);
+  text((int)(power*(100.d/30.d)), -35, 30);
 }
 
 void mousePressed() {
@@ -42,9 +51,18 @@ void mousePressed() {
     ball = new Ball();
     ball.x = player.x+(blockx/2);
     ball.y = player.y-(blockx/2);
+    //aim
     ball.velx = ((mouseX-(width-height)/2)-ball.x);
     ball.vely = (mouseY-ball.y);
     ball.normalize();
   }
 }
-    
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  if(e > 0 && power > 0) {
+    power--;
+  }
+  if(e < 0 && power < 30) {
+    power++;
+  }
+}

@@ -28,10 +28,11 @@ class Ball {
     x = int(x+velx);
     int indexX = x/blockx;
     int indexY = y/blocky;
-    int distRight = x-((indexX)*blockx);
-    int distLeft = ((indexX)*blockx)-x;
-    println("distLeft: "+distLeft);
-    println("distRight: "+distRight);
+    int distRight = abs(x-((indexX+1)*blockx));
+    int distLeft = abs(x-((indexX)*blockx));
+    int distTop = abs(y-((indexY)*blockx));
+    //println("distLeft: "+distLeft);
+    //println("distRight: "+distRight);
     if (x > (screen_dimension*blockx)) {
       velx *= -1;
       x = screen_dimension*blockx;
@@ -39,13 +40,20 @@ class Ball {
     }
     int currentBlock = stateOfIndex(indexX, indexY);
     //side colisions
-    if (stateOfIndex(indexX+1, indexY) == 1 && distRight <= 5) {
+    if (stateOfIndex(indexX+1, indexY) == 1 &&(distRight-velx) <= 5) {
       velx *= -1; //<>//
-    } else if (stateOfIndex(indexX-1, indexY) == 1 && distLeft <= 5) {
+      x = ((indexX+1)*blockx);
+    } else if (stateOfIndex(indexX-1, indexY) == 1 && (distLeft+velx) <= 5) {
       velx *= -1;
+      x = ((indexX)*blockx);      
     }
-    //bottom collision
-    if (currentBlock == 0) {
+    //bottom collisions
+    if(stateOfIndex(indexX, indexY-1) == 1 && (distTop+vely) <= 5) {
+      vely *= -1;
+      y = ((indexY+1)*blockx);
+    }
+    //top collisions
+    if(currentBlock == 0) { 
       grounded = false;
       vely++;
     } else {
@@ -53,14 +61,19 @@ class Ball {
       velx = 0;
       y = indexY*blockx;
       grounded = true;
+      //treleports player
+      player.x = x;
+      player.y = y;
       ball = null;
     }
+    //rect(indexX*blockx, indexY*blockx, blockx, blockx);
   }
 
   void normalize() {
     PVector vector = new PVector(velx, vely);
     vector.normalize();
-    vector.mult(dist(x, y, (mouseX-(width-height)/2), mouseY)/30);
+    //calculates power
+    vector.mult(power);
     velx = vector.x;
     vely = vector.y;
   }

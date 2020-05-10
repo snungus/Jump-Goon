@@ -46,11 +46,15 @@ class Player {
   }
 
   void playerCtrl() {
-    if (keys[65] == true && grounded == true) {    
-      velx -= 2;
+    if (keys[65] == true && grounded == true) { 
+      if(velx >= -10){
+        //velx -= 2;
+      }
     }
     if (keys[68] == true && grounded == true) {
-      velx += 2;
+      if(velx <= 10){
+        //velx += 2;
+      }
     }
   }
 }
