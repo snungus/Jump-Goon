@@ -6,21 +6,25 @@ class Ball {
   boolean grounded;
   int ballSize = 20;
 
-
-
   Ball() {
+  }
+  
+  void changeLevel() {
+    if(y <= 0) {
+      screenNum++;
+      currentScreen = world[screenNum];
+      y += height;
+    }
+    if(y >= height-20) {
+      screenNum--;
+      currentScreen = world[screenNum];
+      y -= height;
+    }
   }
 
   void dBall() {
     fill(0, 0, 255);
     ellipse(x, y, ballSize, ballSize);
-  }
-
-  int stateOfIndex(int indexX, int indexY) {
-    if (indexX >= 25 || indexX < 0 || indexY >= 25 || indexY < 0) {
-      return -1;
-    }
-    return currentScreen.screen[indexX][indexY];
   }
 
   void ballPhys() {

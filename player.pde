@@ -16,6 +16,14 @@ class Player {
     fill(255, 0, 0);
     rect(x, y-blocky, blockx, blocky);
   }
+  
+  void fall() {
+    if(y >= height-20) {
+      screenNum--;
+      currentScreen = world[screenNum];
+      y -= height;
+    }
+  }
 
   void playerPhys() {
     y = y+vely;
@@ -28,7 +36,7 @@ class Player {
     } else if (velx > 0 && grounded == true) {
       velx -= 1;
     }
-    if (currentScreen.screen[indexX][indexY] == 0) {
+    if (stateOfIndex(indexX, indexY) == 0) {
       grounded = false;
       vely++;
     } else {
@@ -36,10 +44,10 @@ class Player {
       y = indexY*blocky;
       grounded = true;
     }
-    if (currentScreen.screen[indexX  ][indexY-1] == 1) {
+    if (stateOfIndex(indexX, indexY-1) == 1) {
       velx = 0;
       x = (indexX+1)*blockx;
-    } else if (currentScreen.screen[indexX+1][indexY-1] == 1) {
+    } else if (stateOfIndex(indexX+1, indexY-1) == 1) {
       velx = 0;
       x = indexX*blockx;
     }
@@ -48,12 +56,12 @@ class Player {
   void playerCtrl() {
     if (keys[65] == true && grounded == true) { 
       if(velx >= -10){
-        //velx -= 2;
+        velx -= 2;
       }
     }
     if (keys[68] == true && grounded == true) {
       if(velx <= 10){
-        //velx += 2;
+        velx += 2;
       }
     }
   }
