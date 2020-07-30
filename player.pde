@@ -16,7 +16,7 @@ class Player {
     fill(255, 0, 0);
     rect(x, y-blocky, blockx, blocky);
   }
-  
+//falling mechanics  
   void fall() {
     if(y >= height-20) {
       screenNum--;
@@ -44,15 +44,15 @@ class Player {
       y = indexY*blocky;
       grounded = true;
     }
-    if (stateOfIndex(indexX, indexY-1) == 1) {
+    if (stateOfIndex(indexX, indexY-1) == 1 || stateOfIndex(indexX, indexY-1) == 2) {
       velx = 0;
       x = (indexX+1)*blockx;
-    } else if (stateOfIndex(indexX+1, indexY-1) == 1) {
+    } else if (stateOfIndex(indexX+1, indexY-1) == 1 || stateOfIndex(indexX+1, indexY-1) == 2) {
       velx = 0;
       x = indexX*blockx;
     }
   }
-
+//controls
   void playerCtrl() {
     if (keys[65] == true && grounded == true) { 
       if(velx >= -10){

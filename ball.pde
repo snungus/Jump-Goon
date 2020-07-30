@@ -8,7 +8,7 @@ class Ball {
 
   Ball() {
   }
-  
+//next/previous level switching
   void changeLevel() {
     if(y <= 0) {
       screenNum++;
@@ -23,7 +23,9 @@ class Ball {
   }
 
   void dBall() {
-    fill(0, 0, 255);
+    int red = 0;
+    int blue = 255;
+    fill(red, 0, blue);
     ellipse(x, y, ballSize, ballSize);
   }
 
@@ -44,13 +46,24 @@ class Ball {
     }
     int currentBlock = stateOfIndex(indexX, indexY);
     //side colisions
-    if (stateOfIndex(indexX+1, indexY) == 1 &&(distRight-velx) <= 5) {
+    boolean contact = true;
+    if (stateOfIndex(indexX+1, indexY) == 1 && (distRight-velx) <= 5 && contact == true) {
       velx *= -1; //<>//
       x = ((indexX+1)*blockx);
-    } else if (stateOfIndex(indexX-1, indexY) == 1 && (distLeft+velx) <= 5) {
+    } else if (stateOfIndex(indexX-1, indexY) == 1 && (distLeft+velx) <= 5 && contact == true) {
       velx *= -1;
       x = ((indexX)*blockx);      
     }
+    //if (stateOfIndex(indexX+1, indexY) == 1 &&(distRight-velx) <= 5) {
+    //  dBall.blue = 0;
+    //  dBall.red = 255;
+    //  contact = false;
+    //  sleep 1000;
+    //  dBall.blue = 255;
+    //  dBall.red = 0;
+    //  contact = true;
+    //} 
+      
     //bottom collisions
     if(stateOfIndex(indexX, indexY-1) == 1 && (distTop+vely) <= 5) {
       vely *= -1;

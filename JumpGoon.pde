@@ -14,7 +14,7 @@ void setup() {
   size(1920, 1080);
   blockx = height/screen_dimension;
   blocky = height/screen_dimension;
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 3; i++) {
     world[i] = new Screen("stages\\"+i+".png");
   }
   currentScreen = world[screenNum];
@@ -49,7 +49,7 @@ void draw() {
   textSize(24);
   text((int)(power*(100.d/30.d)), -35, 30);
 }
-
+//ball shooty
 void mousePressed() {
   if (ball == null) {
     ball = new Ball();
@@ -77,7 +77,7 @@ int stateOfIndex(int indexX, int indexY) {
     }
     return currentScreen.screen[indexX][indexY];
   }
-  
+//dev skips
 void devSkips() {
   if(keys[49] == true) {
     screenNum = 0;
@@ -85,6 +85,10 @@ void devSkips() {
   }
   if(keys[50] == true) {
     screenNum = 1;
+    currentScreen = world[screenNum];
+  }
+  if(keys[51] == true) {
+    screenNum = 2;
     currentScreen = world[screenNum];
   }
 }
