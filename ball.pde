@@ -1,21 +1,26 @@
-class Ball {
+class Ball { //<>//
   int x = height/2;
   int y = height-300;
   float velx = 0;
   float vely = 0;
   boolean grounded;
   int ballSize = 20;
+  int red = 0;
+  int blue = 255;
+  long timer = Instant.now().toEpochMilli();
+  boolean contact = true;
+  final int NOCLIPTIME = 1000;
 
   Ball() {
   }
-//next/previous level switching
+  //next/previous level switching
   void changeLevel() {
-    if(y <= 0) {
+    if (y <= 0) {
       screenNum++;
       currentScreen = world[screenNum];
       y += height;
     }
-    if(y >= height-20) {
+    if (y >= height-20) {
       screenNum--;
       currentScreen = world[screenNum];
       y -= height;
@@ -23,8 +28,6 @@ class Ball {
   }
 
   void dBall() {
-    int red = 0;
-    int blue = 255;
     fill(red, 0, blue);
     ellipse(x, y, ballSize, ballSize);
   }
@@ -39,6 +42,11 @@ class Ball {
     int distTop = abs(y-((indexY)*blockx));
     //println("distLeft: "+distLeft);
     //println("distRight: "+distRight);
+    if (Instant.now().toEpochMilli() - timer >= NOCLIPTIME) {
+      blue = 255;
+      red = 0;
+      contact = true;
+    }
     if (x > (screen_dimension*blockx)) {
       velx *= -1;
       x = screen_dimension*blockx;
@@ -46,42 +54,45 @@ class Ball {
     }
     int currentBlock = stateOfIndex(indexX, indexY);
     //side colisions
-    boolean contact = true;
-    if (stateOfIndex(indexX+1, indexY) == 1 && (distRight-velx) <= 5 && contact == true) {
-      velx *= -1; //<>//
-      x = ((indexX+1)*blockx);
-    } else if (stateOfIndex(indexX-1, indexY) == 1 && (distLeft+velx) <= 5 && contact == true) {
-      velx *= -1;
-      x = ((indexX)*blockx);      
-    }
-    //if (stateOfIndex(indexX+1, indexY) == 1 &&(distRight-velx) <= 5) {
-    //  dBall.blue = 0;
-    //  dBall.red = 255;
+    //if (stateOfIndex(indexX+1, indexY) == 1 && (distRight-velx) <= 5 && contact) {
+    //  velx *= -1;
+    //  x = ((indexX+1)*blockx);
+    //  print(contact + "right");
+    //} else if (stateOfIndex(indexX-1, indexY) == 1 && (distLeft+velx) <= 5 && contact) {
+    //  velx *= -1;
+    //  x = ((indexX)*blockx);
+    //  print(contact + "left");
+    //}
+    //if (stateOfIndex(indexX+1, indexY) == 2 &&(distRight-velx) <= 5) {
+    //  blue = 0;
+    //  red = 255;
     //  contact = false;
-    //  sleep 1000;
-    //  dBall.blue = 255;
-    //  dBall.red = 0;
-    //  contact = true;
+    //  timer = Instant.now().toEpochMilli();
     //} 
-      
-    //bottom collisions
-    if(stateOfIndex(indexX, indexY-1) == 1 && (distTop+vely) <= 5) {
-      vely *= -1;
-      y = ((indexY+1)*blockx);
-    }
+
+    ////bottom collisions
+    //if (stateOfIndex(indexX, indexY-1) == 1 && (distTop+vely) <= 5 && contact) {
+    //  vely *= -1;
+    //  y = ((indexY+1)*blockx);
+    //  print(contact + "bottom");
+    //}
     //top collisions
-    if(currentBlock == 0) { 
+    if (currentBlock == 0) { 
+      print(contact + "top");
       grounded = false;
       vely++;
     } else {
+      print(contact + "top");
       vely = 0;
       velx = 0;
       y = indexY*blockx;
       grounded = true;
-      //treleports player
-      player.x = x;
-      player.y = y;
-      ball = null;
+      //teleports player
+      if (contact) {
+        player.x = x;
+        player.y = y;
+        ball = null;
+      }
     }
     //rect(indexX*blockx, indexY*blockx, blockx, blockx);
   }
